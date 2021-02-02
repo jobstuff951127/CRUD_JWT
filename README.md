@@ -1,7 +1,7 @@
 # Toka
 This project is a Toka technical exam.
 
-Currently undone, some techs that i use: 
+Currently unfinished, some technologies that i used:
 
 *Vuetify
 *Vue CLI
