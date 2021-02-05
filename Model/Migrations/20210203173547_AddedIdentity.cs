@@ -46,7 +46,22 @@ namespace Model.Migrations
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
-
+            migrationBuilder.CreateTable(
+                name: "Costumers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "varchar(150)", unicode: false, maxLength: 150, nullable: false),
+                    LastName = table.Column<string>(type: "varchar(150)", unicode: false, maxLength: 150, nullable: false),
+                    Cellphone = table.Column<string>(type: "varchar(15)", unicode: false, maxLength: 15, nullable: false),
+                    Adress = table.Column<string>(type: "varchar(150)", unicode: false, maxLength: 150, nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "date", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Costumers", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
@@ -211,6 +226,8 @@ namespace Model.Migrations
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
 
+            migrationBuilder.DropTable(
+                name: "Costumers");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

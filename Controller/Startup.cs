@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Controller.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -36,6 +37,8 @@ namespace Controller
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             services.AddControllers();
 
             services.AddSwaggerGen(c =>
@@ -50,7 +53,8 @@ namespace Controller
             {
                 opt.AddPolicy("CorsPolicy", policy =>
                     {
-                        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://192.168.1.66:8080");
+                        //policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://192.168.1.66:8080");
+                        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://172.16.214.63:8080");
                     });
             });
             var builder = services.AddIdentityCore<AppUser>();

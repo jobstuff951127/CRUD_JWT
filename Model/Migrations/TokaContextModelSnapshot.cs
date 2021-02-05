@@ -224,18 +224,18 @@ namespace Model.Migrations
 
                     b.Property<string>("Adress")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(150)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(150)");
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("date");
 
                     b.Property<string>("Cellphone")
                         .IsRequired()
-                        .HasMaxLength(20)
+                        .HasMaxLength(15)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("varchar(15)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -251,7 +251,7 @@ namespace Model.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Costumer");
+                    b.ToTable("Costumers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
+// using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Model;
@@ -16,8 +17,10 @@ namespace Controller
     public class UserController : ControllerBase
     {
         private readonly TokaContext _context;
-        public UserController(TokaContext context)
+        private readonly IMapper _mapper;
+        public UserController(TokaContext context, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
         }
 
@@ -27,24 +30,10 @@ namespace Controller
         {
             try
             {
-                var costumers = await _context.Costumers
-                .Select(x => new CostumerDTO
-                {
-                    FirstName = x.FirstName,
-                    LastName = x.LastName,
-                    Cellphone = x.Cellphone,
-                    Adress = x.Adress,
-                    BirthDate = x.BirthDate
+                var costumers = await _context.Costumers.Take(50)
+                .Select(c => _mapper.Map<CostumerDTO>(c)).ToListAsync();
 
-                }).ToListAsync();
-
-                if (costumers.Count() == 0)
-                {
-                    return NotFound();
-                }
-
-                return Ok(costumers);
-
+                return costumers.Any() ? Ok(costumers) : NotFound();
             }
             catch (Exception ex)
             {
@@ -54,18 +43,12 @@ namespace Controller
 
         //Este metodo es el endpoint "get one", es asincrono y devuelve un registro
         [HttpGet("{id}")]
-        public async Task<ActionResult<Costumer>> GetCostumer(int id)
+        public async Task<ActionResult<CostumerDTO>> GetCostumer(int id)
         {
             try
             {
-                var costumerObj = await _context.Costumers.FindAsync(id);
-                if (costumerObj is null)
-                {
-                    return NotFound();
-
-                }
-
-                return Ok(costumerObj);
+                var costumers = await _context.Costumers.FindAsync(id);
+                return costumers is null ? NotFound() : Ok(_mapper.Map<CostumerDTO>(costumers));
             }
             catch (Exception ex)
             {
@@ -83,23 +66,17 @@ namespace Controller
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateContact(int id, CostumerDTO costumerDTO)
         {
-
             try
             {
-                var costumerObj = await _context.Costumers.FindAsync(id);
+                var costumers = await _context.Costumers.FindAsync(id);
 
-                costumerObj.FirstName = costumerDTO.FirstName;
-                costumerObj.LastName = costumerDTO.LastName;
-                costumerObj.Cellphone = costumerDTO.Cellphone;
-                costumerObj.Adress = costumerDTO.Adress;
-                costumerObj.BirthDate = costumerDTO.BirthDate;
-
-                await _context.SaveChangesAsync();
-
-                if (costumerObj is null)
+                if (costumers is null)
                     return NotFound();
 
-                return NoContent();
+                _mapper.Map(costumerDTO, costumers);
+
+                await _context.SaveChangesAsync();
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -113,23 +90,20 @@ namespace Controller
         //Este metodo es el "endpoint" crear o insertar, 
         //retornando un 204 en caso de que la transaccion haya sido exitosa o un 500 en caso contrario
         [HttpPost]
-        public async Task<ActionResult<Costumer>> CreateCostumer(Costumer costumerObj)
+        public async Task<ActionResult<Costumer>> CreateCostumer(CostumerDTO costumerDTO)
         {
-
             try
             {
-                _context.Costumers.Add(costumerObj);
+                _context.Costumers.Add(_mapper.Map<Costumer>(costumerDTO));
                 await _context.SaveChangesAsync();
 
                 //El NoContent regresa el 204
-                return NoContent();
+                return Ok();
             }
             catch (Exception ex)
             {
-
                 return StatusCode(500, ex);
             }
-
         }
         #endregion
 
@@ -151,11 +125,11 @@ namespace Controller
                 //Este es un delete en EF Core
                 _context.Costumers.Remove(contactObj);
                 await _context.SaveChangesAsync();
-                return NoContent();
+                return Ok();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, ex);
             }
         }
 

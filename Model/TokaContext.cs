@@ -19,23 +19,26 @@ namespace Model
         }
 
         public virtual DbSet<Costumer> Costumers { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Costumer>(entity =>
             {
-                entity.ToTable("Costumer");
-
                 entity.Property(e => e.Adress)
                     .IsRequired()
-                    .HasMaxLength(100)
+                    .HasMaxLength(150)
                     .IsUnicode(false);
 
-                entity.Property(e => e.BirthDate).HasColumnType("date");
+                entity.Property(e => e.BirthDate)
+                                    .IsRequired()
+                                    .HasMaxLength(15)
+                                    .IsUnicode(false);
 
                 entity.Property(e => e.Cellphone)
                     .IsRequired()
-                    .HasMaxLength(20)
+                    .HasMaxLength(15)
                     .IsUnicode(false);
 
                 entity.Property(e => e.FirstName)
