@@ -127,7 +127,7 @@ export default {
     drawer: null,
     items: [
       {
-        action: "face",
+        action: "supervised_user_circle",
         title: "Users",
         active: false,
         items: [

@@ -8,7 +8,6 @@ namespace Model.DTO
         {
             CreateMap<Costumer, CostumerDTO>();
             CreateMap<CostumerDTO, Costumer>();
-            // CreateMap<ContactUpdateDto, ContactosMavidavidBlancos>();
         }
     }
 }

@@ -7,6 +7,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Model;
+using Model.DTO;
 
 namespace Controller
 {
@@ -30,7 +31,8 @@ namespace Controller
         {
             try
             {
-                var costumers = await _context.Costumers.Take(50)
+                var costumers = await _context.Costumers.OrderByDescending(c => c.Id)
+                .Take(50).Where(c => c.Status)
                 .Select(c => _mapper.Map<CostumerDTO>(c)).ToListAsync();
 
                 return costumers.Any() ? Ok(costumers) : NotFound();
@@ -47,7 +49,7 @@ namespace Controller
         {
             try
             {
-                var costumers = await _context.Costumers.FindAsync(id);
+                var costumers = await _context.Costumers.FirstOrDefaultAsync(c => c.Status && c.Id == id);
                 return costumers is null ? NotFound() : Ok(_mapper.Map<CostumerDTO>(costumers));
             }
             catch (Exception ex)
@@ -64,11 +66,12 @@ namespace Controller
         //o un 404 en caso contrario o un 500 en caso de algun error de conexion u otro
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateContact(int id, CostumerDTO costumerDTO)
+        public async Task<IActionResult> UpdateCostumer(int id, CostumerDTO costumerDTO)
         {
             try
             {
-                var costumers = await _context.Costumers.FindAsync(id);
+                var costumers = await _context.Costumers
+                .FirstOrDefaultAsync(c => c.Status && c.Id == id);
 
                 if (costumers is null)
                     return NotFound();
@@ -96,7 +99,6 @@ namespace Controller
             {
                 _context.Costumers.Add(_mapper.Map<Costumer>(costumerDTO));
                 await _context.SaveChangesAsync();
-
                 //El NoContent regresa el 204
                 return Ok();
             }
@@ -117,13 +119,13 @@ namespace Controller
         {
             try
             {
-                var contactObj = await _context.Costumers.FindAsync(id);
+                var costumers = await _context.Costumers
+                .FirstOrDefaultAsync(c => c.Status && c.Id == id);
 
-                if (contactObj is null)
+                if (costumers is null)
                     return NotFound();
 
-                //Este es un delete en EF Core
-                _context.Costumers.Remove(contactObj);
+                costumers.Status = false;
                 await _context.SaveChangesAsync();
                 return Ok();
             }

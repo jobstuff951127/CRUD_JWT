@@ -5,6 +5,8 @@ namespace Model
 {
     public class CostumerDTO
     {
+
+        public int Id { get; set; }
         [Required]
         public string FirstName { get; set; }
         [Required]
@@ -18,5 +20,7 @@ namespace Model
         public string Adress { get; set; }
         [Required]
         public string BirthDate { get; set; }
+        [Required]
+        public bool Status { get; set; }
     }
 }

@@ -28,7 +28,8 @@ namespace Model.DTO
                         LastName = "Gerz",
                         Cellphone = "551323221",
                         Adress = "White brow #244",
-                        BirthDate = DateTime.Now.Date.AddMonths(-3).ToShortDateString()
+                        BirthDate = DateTime.Now.Date.AddMonths(-3).ToShortDateString(),
+                        Status = true
                     },
                     new Costumer
                     {

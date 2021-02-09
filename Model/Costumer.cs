@@ -21,5 +21,7 @@ namespace Model
         public string Adress { get; set; }
         [Required]
         public string BirthDate { get; set; }
+        [Required]
+        public bool Status { get; set; }
     }
 }
