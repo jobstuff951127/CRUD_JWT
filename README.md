@@ -18,5 +18,5 @@ Once cloned go into the "Controller" folder through terminal and execute the "do
 
 Notice:
 
-The connection string must be edited along with the CORS policy.
+The connection string must be edited along with the CQRS policy.
 
