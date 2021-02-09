@@ -56,7 +56,8 @@ namespace Model.Migrations
                     LastName = table.Column<string>(type: "varchar(150)", unicode: false, maxLength: 150, nullable: false),
                     Cellphone = table.Column<string>(type: "varchar(15)", unicode: false, maxLength: 15, nullable: false),
                     Adress = table.Column<string>(type: "varchar(150)", unicode: false, maxLength: 150, nullable: false),
-                    BirthDate = table.Column<DateTime>(type: "date", nullable: false)
+                    BirthDate = table.Column<string>(type: "varchar(15)", unicode: false, maxLength: 15, nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

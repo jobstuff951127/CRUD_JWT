@@ -144,7 +144,7 @@ export default {
       } else {
         this.activeColor = "#01579B";
       }
-    },
+    }
   },
 };
 </script>

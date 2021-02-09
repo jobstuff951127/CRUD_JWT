@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Controller.Security;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 // using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,21 +14,49 @@ using Model.DTO;
 
 namespace Controller
 {
-    //Aqui se asigna la ruta
     [Route("api/[controller]")]
-    //Nos permite no tener que esspecificar el [fromBody]
     [ApiController]
     public class UserController : ControllerBase
     {
+        //DI at its finest
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly JwtGenerator _jwtGenerator;
         private readonly TokaContext _context;
         private readonly IMapper _mapper;
-        public UserController(TokaContext context, IMapper mapper)
+        public UserController(TokaContext context, IMapper mapper, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, JwtGenerator jwtGenerator)
         {
             _mapper = mapper;
             _context = context;
+            _jwtGenerator = jwtGenerator;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
-        // [Authorize]
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public async Task<ActionResult<UserDTO>> Login(UserDTO userObj)
+        {
+            var user = await _userManager.FindByEmailAsync(userObj.Email);
+
+            if (user is null)
+                return NotFound();
+
+            var result = await _signInManager
+                .CheckPasswordSignInAsync(user, userObj.Password, false);
+
+            if (result.Succeeded)
+            {
+                return new UserDTO
+                {
+                    Token = _jwtGenerator.CreateToken(user),
+                    UserName = user.UserName
+                };
+            }
+            return Unauthorized();
+        }
+        //This is an asynchronous GET endpoint that maps the result into a DTO to send the proper response in a ternary 
+        // operator     
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CostumerDTO>>> GetCostumers()
         {
@@ -42,14 +73,15 @@ namespace Controller
                 return StatusCode(500, ex);
             }
         }
-
-        //Este metodo es el endpoint "get one", es asincrono y devuelve un registro
+        //This is an asynchronous GET by id endpoint that maps the result into a DTO in a ternary operator       
+        //[Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<CostumerDTO>> GetCostumer(int id)
         {
             try
             {
                 var costumers = await _context.Costumers.FirstOrDefaultAsync(c => c.Status && c.Id == id);
+
                 return costumers is null ? NotFound() : Ok(_mapper.Map<CostumerDTO>(costumers));
             }
             catch (Exception ex)
@@ -61,9 +93,7 @@ namespace Controller
 
         #region UPDATE
 
-        //Este metodo es el endpoint "update", es asincrono y devuelve un 204 en caso
-        //caso de que el registro a editar haya sido encontrado por medio del id y editado
-        //o un 404 en caso contrario o un 500 en caso de algun error de conexion u otro
+        //This is an asynchronous PUT endpoint that maps a DTO into Costumers
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCostumer(int id, CostumerDTO costumerDTO)
@@ -90,8 +120,8 @@ namespace Controller
         #endregion
 
         #region CREATE
-        //Este metodo es el "endpoint" crear o insertar, 
-        //retornando un 204 en caso de que la transaccion haya sido exitosa o un 500 en caso contrario
+        //This is an asynchronous POST endpoint that maps a DTO into Costumers (DataContext Object)
+
         [HttpPost]
         public async Task<ActionResult<Costumer>> CreateCostumer(CostumerDTO costumerDTO)
         {
@@ -110,9 +140,8 @@ namespace Controller
         #endregion
 
         #region DELETE
-        //Este endpoint es el delete, primero busca el registro a eliminar 
-        //luego en caso de que no exista devuelve un 404
-        //En caso contrario devuelve un 204, una respuesta sin contenido
+
+        //This is an asynchronous DEL endpoint that LOGICALLY delete a row from the DB
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCostumer(int id)

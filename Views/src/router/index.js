@@ -10,9 +10,6 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
-    meta: {
-      requiresAuth: false
-    }
   },
   {
     path: '/Login',
@@ -28,14 +25,9 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    next({
-      path: '/login',
-      params: { nextUrl: to.fullPath }
-    })
-  } else {
-    next()
-  }
+  if (to.name !== 'Login' && localStorage.getItem('jwt') == null)
+    next({ name: 'Login' })
+  else next()
 })
 
 

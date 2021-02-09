@@ -10,8 +10,8 @@ using Model;
 namespace Model.Migrations
 {
     [DbContext(typeof(TokaContext))]
-    [Migration("20210208204156_Added status attr")]
-    partial class Addedstatusattr
+    [Migration("20210209030115_AddedIdentity")]
+    partial class AddedIdentity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -90,16 +90,23 @@ export default {
     },
   }),
 
+  created() {
+    localStorage.removeItem("jwt");
+    localStorage.removeItem("user");
+  },
+
   methods: {
     async login() {
-      await agent.Users.list()
+      await agent.Users.logIn(this.form)
         .then((response) => {
-          this.Users = response.data;
-          console.log(response.data)
+          localStorage.setItem("user", JSON.stringify(response.data.userName));
+          localStorage.setItem("jwt", response.data.token);
+          if (localStorage.getItem("jwt") != null) {
+            this.$router.push("/");
+          }
         })
         .catch(() => console.log());
-        //.finally(() => (this.loader = false));
-    }
+    },
   },
 };
 </script>

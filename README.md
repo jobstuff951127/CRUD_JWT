@@ -1,15 +1,16 @@
 # Toka
-This project is a Toka technical exam.
+This project was a Toka technical exam.
 
-Currently unfinished, some technologies that i used:
+ Some technologies that i used:
 
 *Vuetify
 *Vue CLI
 *Vue.js
 *Identity
-*EntiframeWork Core
+*EntityframeWork Core (code first approach)
 *NET 5 (swagger comes setted by def)
 *WepApi (REST)
+*Auth JWT
 
 
 To run this project NET 5 must be installed along with Node.js and Git preferibly.

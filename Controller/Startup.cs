@@ -39,7 +39,11 @@ namespace Controller
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            services.AddControllers();
+            services.AddControllers(opt =>
+            {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                opt.Filters.Add(new AuthorizeFilter(policy));
+            });
 
             services.AddSwaggerGen(c =>
             {
@@ -53,8 +57,8 @@ namespace Controller
             {
                 opt.AddPolicy("CorsPolicy", policy =>
                     {
-                        //policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://192.168.1.66:8080");
-                        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://172.16.214.63:8080");
+                        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://192.168.1.66:8080");
+                        //policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://172.16.214.63:8080");
                     });
             });
             var builder = services.AddIdentityCore<AppUser>();
@@ -62,17 +66,17 @@ namespace Controller
             identityBuilder.AddEntityFrameworkStores<TokaContext>();
             identityBuilder.AddSignInManager<SignInManager<AppUser>>();
 
-            // var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("super secret key"));
-            services.AddAuthentication();
-
-            //     opt.TokenValidationParameters = new TokenValidationParameters{
-            //         ValidateIssuerSigningKey = true,
-            //         IssuerSigningKey = key,
-            //         ValidateAudience = false,
-            //         ValidateIssuer = false
-            //     };
-            // });
-            // services.AddScoped<JwtGenerator>();
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("super secret key"));
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(opt =>
+                    opt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = key,
+                        ValidateAudience = false,
+                        ValidateIssuer = false
+                    });
+            services.AddScoped<JwtGenerator, JwtGenerator>();
 
         }
 
@@ -91,9 +95,10 @@ namespace Controller
             app.UseRouting();
 
             app.UseCors("CorsPolicy");
-            app.UseAuthentication();
-            app.UseAuthorization();
 
+            app.UseAuthentication();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
