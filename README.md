@@ -19,8 +19,8 @@ the "npm i" command followed by "npm run serve".
 
 Notice:
 
-*The DB connection string must be edited along with the CQRS policy.
-*Go to "Model" folder into the "Seed" class to get the user credentials
+*The DB connection string must be edited along with the CQRS policy. <br />
+*Go to "Model" folder into the "Seed" class to get the user credentials <br />
 *Create an empty DB called "Toka" 
 
 
