@@ -57,8 +57,8 @@ namespace Controller
             {
                 opt.AddPolicy("CorsPolicy", policy =>
                     {
-                        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://192.168.1.66:8080");
-                        //policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://172.16.214.63:8080");
+                        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://172.16.214.63:8080");
+                        //policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://192.168.1.66:8080");
                     });
             });
             var builder = services.AddIdentityCore<AppUser>();
@@ -87,7 +87,7 @@ namespace Controller
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BetterWareAPI v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Toka v1"));
             }
 
             //app.UseHttpsRedirection();

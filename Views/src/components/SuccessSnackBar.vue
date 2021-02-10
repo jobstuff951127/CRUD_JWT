@@ -2,7 +2,7 @@
 	<v-snackbar
 		v-model="snackbar"
 		:timeout="timeout"
-		color="primary"
+		color="green darken-3"
 		elevation="0"
 		:right="true"
 		:shaped="true"

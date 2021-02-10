@@ -105,6 +105,7 @@
       color="blue darken-4"
       height="auto"
       class="font-weight-medium"
+
       dark
     >
       <v-col class="text-center" cols="12">
@@ -127,11 +128,11 @@ export default {
     drawer: null,
     items: [
       {
-        action: "supervised_user_circle",
-        title: "Users",
+        action: "contacts",
+        title: "Costumers",
         active: false,
         items: [
-          { title: "Registry", action: "manage_accounts", route: "Home" },
+          { title: "Registry", action: "recent_actors", route: "Home" },
         ],
       },
     ],

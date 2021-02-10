@@ -3,23 +3,23 @@
     <v-flex>
       <v-data-table
         :headers="headers"
-        :items="users"
+        :items="costumers"
         :search="search"
         :loading="loader"
         hide-default-footer
         @page-count="pageCount = $event"
         :page.sync="page"
         item-class="red--text"
-        loading-text="Loading users..."
+        loading-text="Loading Costumers..."
         class="elevation-3"
       >
         <template v-slot:top>
           <v-toolbar flat color>
             <div v-if="$vuetify.breakpoint.smAndDown">
-              <v-icon large color="primary">manage_accounts</v-icon>
+              <v-icon large color="primary">recent_actors</v-icon>
             </div>
             <div v-else>
-              <v-toolbar-title>Users</v-toolbar-title>
+              <v-toolbar-title>Costumers</v-toolbar-title>
             </div>
             <v-divider class="mx-4" inset vertical></v-divider>
             <v-spacer></v-spacer>
@@ -37,7 +37,7 @@
                 <v-icon
                   large
                   v-bind="attrs"
-                  class="mx-6"
+                  class="ml-3"
                   color="primary"
                   v-on="on"
                   @click="dialog = true"
@@ -241,7 +241,7 @@ export default {
     menu: false,
     success: "",
     secs: 2000,
-    users: [],
+    costumers: [],
     dialog: false,
     loader: true,
     loaderSave: false,
@@ -300,10 +300,10 @@ export default {
       this.mouseMonth = null;
     },
     async ToList() {
-      await agent.Users.list()
+      await agent.Costumers.list()
         .then((response) => {
-          this.users = [];
-          this.users = response.data;
+          this.costumers = [];
+          this.costumers = response.data;
         })
         .catch(() => console.log())
         .finally(() => (this.loader = false));
@@ -334,7 +334,7 @@ export default {
       this.toastSave = false;
 
       setTimeout(() => {
-        agent.Users.delete(this.form.id)
+        agent.Costumers.delete(this.form.id)
           .then((response) => {
             if (response.status === 200) {
               this.loaderConditionSave = false;
@@ -346,7 +346,7 @@ export default {
           .finally(() => {
             this.adModal = false;
             this.loaderConditionSave = false;
-            this.clean();
+            this.close();
           });
       }, this.secs);
     },
@@ -372,7 +372,7 @@ export default {
       this.toastSave = false;
       setTimeout(() => {
         if (this.editedIndex > -1) {
-          agent.Users.update(this.form)
+          agent.Costumers.update(this.form)
             .then((response) => {
               if (response.status === 200) {
                 this.loaderSave = false;
@@ -387,7 +387,7 @@ export default {
               this.loaderSave = false;
             });
         } else {
-          agent.Users.create(this.form)
+          agent.Costumers.create(this.form)
             .then((response) => {
               if (response.status === 200) {
                 this.ToList();

@@ -31,7 +31,6 @@ axios.interceptors.response.use(undefined, error => {
         const { status } = error.response;
 
         if (status === 404) {
-            //console.log("Ooops not found!")
             iziToast.warning({
                 progressBarColor: 'black',
                 titleColor: "black",
@@ -84,13 +83,12 @@ axios.interceptors.response.use(undefined, error => {
                 balloon: true,
                 animateInside: true,
                 drag: true,
-                message: "Authorization is needed",
+                message: "Authorization needed",
                 backgroundColor: "#ff2f21",
             });
         }
     }
 })
-
 
 const responseBody = (response) => response;
 
@@ -101,16 +99,19 @@ const requests = {
     del: (url) => axios.delete(url).then(responseBody)
 }
 
-
 const Users = {
-    list: () => requests.get('/User'),
-    details: (id) => requests.get(`/User/${id}`),
-    create: (user) => requests.post('/User', user),
-    update: (user) => requests.put(`/User/${user.id}`, user),
-    delete: (id) => requests.del(`/User/${id}`),
     logIn: (user) => requests.post(`/User/login`, user)
 }
 
+const Costumers = {
+    list: () => requests.get('/Costumer'),
+    details: (id) => requests.get(`/Costumer/${id}`),
+    create: (costumer) => requests.post('/Costumer', costumer),
+    update: (costumer) => requests.put(`/Costumer/${costumer.id}`, costumer),
+    delete: (id) => requests.del(`/Costumer/${id}`),
+}
+
 export default {
-    Users
+    Users,
+    Costumers
 }
