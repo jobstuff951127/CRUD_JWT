@@ -27,8 +27,10 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   if (to.name !== 'Login' && localStorage.getItem('jwt') == null)
     next({ name: 'Login' })
-  else next()
+  else if (to.name === 'Login' && localStorage.getItem('jwt') !== null)
+    next({ name: 'Home' })
+  else
+    next()
 })
-
 
 export default router
