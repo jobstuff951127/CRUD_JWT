@@ -1,7 +1,3 @@
-# Objective
-
-Develop a CRUD example using jwt auth.
-
 # Start Up
 
 To run this project NET 5 (v5.0.3) must be installed along with Node.js and Git preferibly.
