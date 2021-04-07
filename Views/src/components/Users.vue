@@ -160,9 +160,9 @@
 								</v-card-actions>
 							</v-card>
 						</v-dialog>
-						<DeleteDialogConfirm v-if="adModal" v-bind:Name="form.FirstName" />
+						<!-- <DeleteDialogConfirm v-if="adModal" v-bind:Name="form.FirstName" /> -->
 
-						<!-- <v-dialog v-model="adModal" max-width="280">
+						<v-dialog v-model="adModal" max-width="280">
 							<v-card>
 								<v-card-title class="headline">Please confirm</v-card-title>
 								<v-card-text>
@@ -183,7 +183,7 @@
 									>
 								</v-card-actions>
 							</v-card>
-						</v-dialog> -->
+						</v-dialog>
 					</v-toolbar>
 				</template>
 				<template v-slot:item.actions="{ item }">
@@ -209,13 +209,11 @@
 
 <script>
 	import SuccessSnackBar from "@/components/SuccessSnackBar";
-	import DeleteDialogConfirm from "@/components/DeleteDialogConfirm";
 	import agent from "@/api/agent";
 
 	export default {
 		components: {
 			SuccessSnackBar,
-			DeleteDialogConfirm,
 		},
 		data: () => ({
 			done: [false, false, false],

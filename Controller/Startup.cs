@@ -57,7 +57,7 @@ namespace Controller
             {
                 opt.AddPolicy("CorsPolicy", policy =>
                     {
-                        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://172.16.214.63:8081");
+                        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://172.16.214.63:8080");
                         //policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://192.168.1.66:8080");
                     });
             });
